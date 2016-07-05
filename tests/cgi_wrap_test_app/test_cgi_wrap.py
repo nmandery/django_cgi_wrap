@@ -2,7 +2,12 @@
 
 from django.test import SimpleTestCase
 import json
-import urlparse
+
+try: 
+    from urlparse import parse_qs # python 2.7
+except ImportError:
+    from urllib.parse import parse_qs
+
 
 from .views import EXAMPLE_CGI, EXAMPLE_ARGS
 
@@ -14,7 +19,7 @@ class ExampleCgiTests(SimpleTestCase):
 
     def data_from_response(self, response):
         self.assertEqual(response.status_code, 200)
-        return json.loads(''.join(response.streaming_content))
+        return json.loads((b''.join(response.streaming_content)).decode('utf-8'))
 
     def test_cgi_output(self):
         data = self.data_from_response(self.client.get(self.uri))
@@ -41,7 +46,7 @@ class ExampleCgiTests(SimpleTestCase):
         }
         response = self.data_from_response(self.client.get(self.uri, data_in))
         query_string = response['env']['QUERY_STRING']
-        data_out = urlparse.parse_qs(query_string)
+        data_out = parse_qs(query_string)
         self.assertEquals(data_in, data_out)
 
     def test_cgi_post_queryparams(self):

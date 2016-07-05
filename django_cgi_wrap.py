@@ -26,7 +26,7 @@ class HttpResponseFile(object):
 
     def __init__(self, filename, delete_on_close=False):
         self.filename = filename
-        self.fh = open(filename)
+        self.fh = open(filename, 'rb')
         self.delete_on_close = delete_on_close
         self._parse_headers()
         self.body_start = self.fh.tell()
@@ -34,18 +34,18 @@ class HttpResponseFile(object):
     def _parse_headers(self):
         while True:
             headerline = self.fh.readline().strip()
-            if headerline == '': # end of headers
+            if headerline == b'': # end of headers
                 break
-            if headerline.startswith('HTTP/'):
+            if headerline.startswith(b'HTTP/'):
                 try:
-                    self.status = int(headerline.split(' ')[1])
+                    self.status = int(headerline.split(b' ')[1])
                 except:
                     pass
                 continue
             try:
-                sep_pos = headerline.index(': ')
-                self.headers[headerline[:sep_pos]] = headerline[sep_pos+2:]
-            except IndexError:
+                sep_pos = headerline.index(b': ')
+                self.headers[headerline[:sep_pos].decode('utf-8')] = headerline[sep_pos+2:].decode('utf-8')
+            except (IndexError, ValueError):
                 pass
         if 'Status' in self.headers:
             try:
