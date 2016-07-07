@@ -82,6 +82,9 @@ def cgi_wrap(request, cgi_binary, env={}, cwd=None, query_string=None,
             of strings starting with the path can be provided. Otherwise
             a string is sufficient.
 
+        env: dict of environment variables to pass to the executable
+            Values from this dict will overide values set by this wrapper.
+
         cwd: work directory to execute the CGI executable in.
 
         query_string: query string to send to the CGI executable.
