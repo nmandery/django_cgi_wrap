@@ -30,4 +30,11 @@ setup(
     long_description=read("README.rst"),
     license="MIT",
     install_requires=["Django>=1.8"],
+    classifiers = [
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: Software Development :: Libraries",
+    ],
 )
