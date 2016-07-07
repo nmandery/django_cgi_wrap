@@ -1,4 +1,12 @@
 # encoding: utf8
+"""
+Wrapper to integrate CGI scripts into django views.
+
+This method preserves the shortcommings of the CGI deployment, but may be adequate
+when the performance hit caused by CGI spawning a new process for each request is
+negligible, a legacy CGI executable needs to be embedded in a new application or
+the ease of deployment is a priority.
+"""
 
 from django.http import FileResponse, HttpResponseServerError
 
@@ -63,7 +71,29 @@ class HttpResponseFile(object):
 
 def cgi_wrap(request, cgi_binary, env={}, cwd=None, query_string=None,
             logger=None):
-    """wrap a cgi binary in a django view"""
+    """Wrap a CGI executable to it into a django view
+
+        Arguments:
+
+        request: The django request object passed to the view.
+
+        cgi_binary: path to the CGI executable. 
+            When the executable needs command line arguments, a list 
+            of strings starting with the path can be provided. Otherwise
+            a string is sufficient.
+
+        cwd: work directory to execute the CGI executable in.
+
+        query_string: query string to send to the CGI executable.
+            This is only a method to override/modify the query string
+            of the original request, which will be used normaly.
+
+        logger: instance of a logging.Logger to log eventual errors to
+
+        
+        Returns a django response object. Data returned by the CGI will
+        be streamed to the client.
+    """
     if type(cgi_binary) not in (list, tuple):
         cgi_binary = [cgi_binary, ]
     # set CGI environment variables
