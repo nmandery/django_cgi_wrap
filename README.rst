@@ -3,6 +3,9 @@ Wrapper to integrate CGI scripts into django views.
 .. image:: https://travis-ci.org/nmandery/django_cgi_wrap.svg?branch=master
        :target: https://travis-ci.org/nmandery/django_cgi_wrap
 
+.. image:: https://badge.fury.io/py/django_cgi_wrap.svg
+       :target: https://badge.fury.io/py/django_cgi_wrap
+
 Simple function to wrap old-style CGI scripts/binaries to integrate them
 into the views of a django app.
 
